@@ -18,6 +18,8 @@ import com.swipeup.blog.payload.ApiResponse;
 import com.swipeup.blog.payload.UserDto;
 import com.swipeup.blog.services.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -26,7 +28,7 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping("/createUser")
-	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+	public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
 		
 		UserDto usrDto  = userService.createUser(userDto);
 		
@@ -37,7 +39,7 @@ public class UserController {
 	
 	
 	@PutMapping("/update/{userId}")
-	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable Integer userId){
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Integer userId){
 		
 		
 		UserDto usrDto = this.userService.updateUser(userDto, userId);
@@ -48,7 +50,7 @@ public class UserController {
 	
 	
 	@GetMapping("/getuser/{userId}")
-	public ResponseEntity<UserDto> getUserById(@PathVariable Integer userId){
+	public ResponseEntity<UserDto> getUserById(@Valid @PathVariable Integer userId){
 		
 		UserDto usr = this.userService.getUserById(userId);
 		
