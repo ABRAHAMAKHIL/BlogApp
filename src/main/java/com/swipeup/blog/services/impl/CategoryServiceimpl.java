@@ -1,9 +1,11 @@
 package com.swipeup.blog.services.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.swipeup.blog.entity.Category;
 import com.swipeup.blog.exception.ResourceNotFoundException;
@@ -11,6 +13,8 @@ import com.swipeup.blog.payload.CategoryDto;
 import com.swipeup.blog.repositories.CategoryRepo;
 import com.swipeup.blog.services.CategoryService;
 
+
+@Service
 public class CategoryServiceimpl implements CategoryService {
 
 	@Autowired
@@ -38,19 +42,27 @@ public class CategoryServiceimpl implements CategoryService {
 	@Override
 	public CategoryDto getCategoryByid(Integer categoryId) {
 		// TODO Auto-generated method stub
-		return null;
+
+		Category category = this.categoryRepo.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException("Category", "CategoryId", categoryId));
+
+		return this.categoryToCategoryDto(category);
 	}
 
 	@Override
-	public CategoryDto deleteCategoryByid(Integer categoryId) {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteCategoryByid(Integer categoryId) {
+		Category category = this.categoryRepo.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException("Category", "CategoryId", categoryId));
+		this.categoryRepo.delete(category);
 	}
 
 	@Override
 	public List<CategoryDto> getAllCategories() {
 		// TODO Auto-generated method stub
-		return null;
+		List<Category> category = this.categoryRepo.findAll();
+		List<CategoryDto> categoryDto = category.stream().map(ct -> this.categoryToCategoryDto(ct))
+				.collect(Collectors.toList());
+		return categoryDto;
 	}
 
 	public Category categoryDtoToCategory(CategoryDto categorydto) {

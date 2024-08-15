@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.swipeup.blog.payload.ApiResponse;
@@ -50,7 +49,7 @@ public class UserController {
 	
 	
 	@GetMapping("/getuser/{userId}")
-	public ResponseEntity<UserDto> getUserById(@Valid @PathVariable Integer userId){
+	public ResponseEntity<UserDto> getUserById(@PathVariable Integer userId){
 		
 		UserDto usr = this.userService.getUserById(userId);
 		
