@@ -29,7 +29,7 @@ public class GlobalExceptionhandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Map<String,String>> methodArgumentNotValidException(MethodArgumentNotValidException ez){
 		
-		Map<String,String> res = new HashMap();
+		Map<String,String> res = new HashMap<String,String>();
 		 ez.getBindingResult().getAllErrors().forEach((error)->{
 			
 			String FieldName = ((FieldError)error).getField();
