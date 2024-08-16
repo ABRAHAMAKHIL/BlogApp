@@ -8,12 +8,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.swipeup.blog.entity.Category;
 import com.swipeup.blog.entity.Post;
 import com.swipeup.blog.entity.User;
 import com.swipeup.blog.exception.ResourceNotFoundException;
+import com.swipeup.blog.payload.FinalPostResponse;
 import com.swipeup.blog.payload.PostDto;
 import com.swipeup.blog.repositories.CategoryRepo;
 import com.swipeup.blog.repositories.PostRepo;
@@ -60,8 +62,7 @@ public class PostServiceimpl implements PostService {
 		post.setContent(postDto.getContent());
 		post.setTitle(postDto.getTitle());
 		post.setImage(postDto.getImageName());
-		
-		
+
 		Post newPost = this.postRepo.save(post);
 
 		return this.PostToPostDto(newPost);
@@ -77,16 +78,26 @@ public class PostServiceimpl implements PostService {
 	}
 
 	@Override
-	public List<PostDto> getAllPost(Integer pageNumber,Integer pageSize) {
+	public FinalPostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+
+		Sort sort = sortDir.equalsIgnoreCase("asc")?Sort.by(sortBy).ascending(): Sort.by(sortBy).descending();
+
 		
-		PageRequest p= PageRequest.of(pageNumber, pageSize);
-		
+		FinalPostResponse postResponse = new FinalPostResponse();
+		PageRequest p = PageRequest.of(pageNumber, pageSize,sort);
+
 		Page<Post> Pagepost = this.postRepo.findAll(p);
-		
+
 		List<Post> post = Pagepost.getContent();
 
 		List<PostDto> postDto = post.stream().map(pst -> this.PostToPostDto(pst)).collect(Collectors.toList());
-		return postDto;
+
+		postResponse.setPostRecords(postDto);
+		postResponse.setPageNumber(Pagepost.getNumber());
+		postResponse.setPageSize(Pagepost.getSize());
+		postResponse.setTotalElements(Pagepost.getTotalElements());
+		postResponse.setTotalpages(Pagepost.getTotalPages());
+		return postResponse;
 	}
 
 	@Override

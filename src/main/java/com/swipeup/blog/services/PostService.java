@@ -2,6 +2,7 @@ package com.swipeup.blog.services;
 
 import java.util.List;
 
+import com.swipeup.blog.payload.FinalPostResponse;
 import com.swipeup.blog.payload.PostDto;
 
 public interface PostService {
@@ -12,7 +13,7 @@ public interface PostService {
 
 	void deletePost(Integer postId);
 
-	List<PostDto> getAllPost(Integer pageSize,Integer pageNumber);
+	FinalPostResponse getAllPost(Integer pageSize,Integer pageNumber,String sortBy,String sortDir);
 
 	PostDto getPostById(Integer postId);
 

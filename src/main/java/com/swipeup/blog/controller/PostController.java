@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.swipeup.blog.payload.ApiResponse;
+import com.swipeup.blog.payload.FinalPostResponse;
 import com.swipeup.blog.payload.PostDto;
 import com.swipeup.blog.services.PostService;
 
@@ -54,10 +55,14 @@ public class PostController {
 	}
 
 	@GetMapping("/post")
-	public ResponseEntity<List<PostDto>> getAllPost(@RequestParam(value="pageNumber" , required = false,defaultValue = "1") Integer pageNumber, @RequestParam(value="pageSize" , required = false,defaultValue = "1") Integer pageSize) {
+	public ResponseEntity<FinalPostResponse> getAllPost(
+			@RequestParam(value = "pageNumber", required = false, defaultValue = "1") Integer pageNumber,
+			@RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
+			@RequestParam(value = "sortBy", required = false, defaultValue = "id") String sortBy,
+			@RequestParam(value = "sortDir", required = false, defaultValue = "asc") String sortDir) {
 
-		List<PostDto> listOfposts = this.postService.getAllPost(pageNumber,pageSize);
-		return new ResponseEntity<List<PostDto>>(listOfposts, HttpStatus.FOUND);
+		FinalPostResponse listOfposts = this.postService.getAllPost(pageNumber, pageSize, sortBy, sortDir);
+		return new ResponseEntity<FinalPostResponse>(listOfposts, HttpStatus.FOUND);
 
 	}
 
