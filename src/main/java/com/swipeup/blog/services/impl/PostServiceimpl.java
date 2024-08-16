@@ -68,6 +68,8 @@ public class PostServiceimpl implements PostService {
 		post.setContent(postDto.getContent());
 		post.setTitle(postDto.getTitle());
 		post.setImage(postDto.getImageName());
+		
+		
 
 		Post newPost = this.postRepo.save(post);
 
