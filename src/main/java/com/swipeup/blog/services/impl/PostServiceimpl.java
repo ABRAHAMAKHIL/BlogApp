@@ -1,7 +1,12 @@
 package com.swipeup.blog.services.impl;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -10,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.swipeup.blog.entity.Category;
 import com.swipeup.blog.entity.Post;
@@ -130,8 +136,10 @@ public class PostServiceimpl implements PostService {
 
 	@Override
 	public List<PostDto> searchPosts(String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Post> post =  this.postRepo.findByTitleContaining(keyword);
+		List<PostDto> searchedPost = post.stream().map(postval->this.PostToPostDto(postval)).collect(Collectors.toList());
+		return searchedPost;
 	}
 
 	public Post PostDtoToPost(PostDto postDto) {
@@ -146,6 +154,36 @@ public class PostServiceimpl implements PostService {
 
 		PostDto postDto = this.modelMapper.map(post, PostDto.class);
 		return postDto;
+	}
+	
+	
+	@Override
+	public String uploadPostImage(String path, MultipartFile file) throws IOException {
+		
+		//fileName
+		
+		String fileName = file.getOriginalFilename();
+		String randomUID = UUID.randomUUID().toString();
+		String fileName1 = randomUID.concat(fileName).substring(fileName.lastIndexOf("."));
+		
+		//fullPath
+		String filePath = path+File.separator+fileName1;
+	
+		//folder creations
+		
+		File f = new File(path);
+		
+		if(!f.exists()) {
+			
+			f.mkdir();
+		}
+		
+		//copy
+		
+		Files.copy(file.getInputStream(), Paths.get(filePath));
+		
+		// TODO Auto-generated method stub
+		return fileName1;
 	}
 
 }
