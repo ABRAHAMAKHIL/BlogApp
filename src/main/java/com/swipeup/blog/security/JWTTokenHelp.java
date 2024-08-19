@@ -42,9 +42,13 @@ public class JWTTokenHelp {
 	}
 
 	// for retrieveing any information from token we will need the secret key
-	private Claims getAllClaimsFromToken(String token) {
-		return ((JwtParser) Jwts.parser().setSigningKey(secret)).parseClaimsJws(token).getBody();
-	}
+    private Claims getAllClaimsFromToken(String token) {
+        JwtParser parser = Jwts.parser()
+                               .setSigningKey(secret)
+                               .build();
+        return parser.parseClaimsJws(token).getBody();
+    }
+
 
 	// check if the token has expired
 	private Boolean isTokenExpired(String token) {
