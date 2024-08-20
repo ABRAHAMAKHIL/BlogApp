@@ -5,19 +5,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.swipeup.blog.payload.JWTAuthRequest;
+import com.swipeup.blog.payload.UserDto;
 import com.swipeup.blog.security.JWTAuthResponse;
 import com.swipeup.blog.security.JWTTokenHelp;
+import com.swipeup.blog.services.UserService;
 
 @RestController
 @RequestMapping("/api/v1/auth/")
@@ -31,6 +31,9 @@ public class AuthController {
 
 	@Autowired
 	private AuthenticationManager manager;
+	
+	@Autowired
+	private UserService userService;
 
 
 	@PostMapping("/login") 
@@ -61,5 +64,17 @@ public class AuthController {
         }
 
     }
+	
+	@PostMapping("/register")
+	public ResponseEntity<UserDto> RegisterUser(@RequestBody UserDto userDto){
+
+		
+		UserDto user = this.userService.registerNewUser(userDto);
+		
+		return new ResponseEntity<UserDto>(user,HttpStatus.OK);
+		
+		
+		
+	}
 
 }

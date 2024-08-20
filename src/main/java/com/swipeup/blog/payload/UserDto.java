@@ -1,5 +1,8 @@
 package com.swipeup.blog.payload;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -21,6 +24,8 @@ public class UserDto {
 	private String password;
 	@NotBlank(message="about must not be Blank")
 	private String about;
+	
+	Set<RoleDto> userRole = new HashSet<>();
 	
 
 }

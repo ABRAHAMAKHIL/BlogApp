@@ -36,7 +36,6 @@ public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	
 	private Integer id;
 	
 	@Column(name="user_name",nullable = false,length=100)
